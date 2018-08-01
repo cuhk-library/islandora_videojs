@@ -17,6 +17,13 @@ function islandora_videojs_admin($form, &$form_state) {
     '#default_value' => variable_get('islandora_videojs_hls_library', FALSE),
     '#element_validate' => array('islandora_videojs_admin_islandora_videojs_hls_library_validate'),
   );
+  $form['islandora_videojs_http_streaming_library'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Videojs-http-streaming library'),
+    '#description' => t('Include the http-streaming library js, videojs-http-streaming.js?'),
+    '#default_value' => variable_get('islandora_videojs_http_streaming_library', FALSE),
+    '#element_validate' => array('islandora_videojs_admin_islandora_videojs_http_streaming_library_validate'),
+  );
   $form['islandora_videojs_center_play_button'] = array(
     '#type' => 'checkbox',
     '#title' => t('Center play button'),
@@ -43,6 +50,17 @@ function islandora_videojs_admin_islandora_videojs_hls_library_validate($element
     if (!file_exists($videojshls)) {
       form_error($element, t('The videojs-contrib-hls.js file can not be found. It can be found <a href = "https://github.com/videojs/videojs-contrib-hls/releases/tag/v3.0.2">here </a>. Place the videojs-contrib-hls.js file in /sites/all/libraries/video-js.'));
       form_set_value($element, $form['islandora_videojs_hls_library']['#checked'] = FALSE, $form_state);
+    }
+  }
+}
+
+function islandora_videojs_admin_islandora_videojs_http_streaming_library_validate($element, &$form_state, $form) {
+  if ($element['#checked'] === TRUE) {
+    $videojs_path = libraries_get_path("video-js");
+    $videojshttpstream = $videojs_path . "/videojs-http-streaming.js";
+    if (!file_exists($videojshttpstream)) {
+      form_error($element, t('The videojs-http-streaming file can not be found. It can be found <a href = "https://github.com/videojs/http-streaming">here </a>. Place the videojs-http-streaming.js file in /sites/all/libraries/video-js.'));
+      form_set_value($element, $form['islandora_videojs_http_streaming_library']['#checked'] = FALSE, $form_state);
     }
   }
 }
